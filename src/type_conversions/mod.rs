@@ -3,9 +3,6 @@ use std::{
     hash::Hash,
 };
 
-// Numerous acts of type terrorism having been commited during the making of this program. Please
-// forgive us.
-pub mod primitives;
 
 // -----------------------------------------------
 /// conversion traits

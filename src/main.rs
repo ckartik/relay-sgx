@@ -12,6 +12,9 @@ use revm::{
 use std::{str::FromStr, sync::Arc};
 use tokio;
 
+mod type_conversions;
+
+use crate::type_conversions::{ToEthers, ToReth};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -46,8 +49,29 @@ async fn main() -> Result<()> {
             // println!("Tx: {:#?}", txn);
             let inspector = NoOpInspector();
             // let hexdata = 
+            /*
+            
+             /// Caller or Author or tx signer
+            pub caller: B160,
+            pub gas_limit: u64,
+            pub gas_price: U256,
+            pub gas_priority_fee: Option<U256>,
+            pub transact_to: TransactTo,
+            pub value: U256,
+            #[cfg_attr(feature = "serde", serde(with = "crate::utilities::serde_hex_bytes"))]
+            pub data: Bytes,
+            pub chain_id: Option<u64>,
+            pub nonce: Option<u64>,
+            pub access_list: Vec<(B160, Vec<U256>)>,
+             */
             // evm.env.tx.data = tx.input;
-            // evm.env.tx.value = rU256::from(tx.value);
+            if let Some(gas_price) = tx.gas_price {
+                evm.env.tx.gas_price = gas_price.into();
+            }
+            evm.env.tx.gas_limit = tx.gas.as_u64();
+            evm.env.tx.value = tx.value.into();
+            // evm.env.tx.data = tx.input.clone();
+
             let yeild = evm.inspect(inspector).unwrap();
             println!("Yeild: {:#?}", yeild);
             println!("txnhash: {:#?}", txn);
