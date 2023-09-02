@@ -1,11 +1,13 @@
 use anyhow::{Ok, Result};
+use std::io::stdout;
+
 use bytes::Bytes;
 use ethers_contract::BaseContract;
 use ethers_core::abi::{parse_abi, AbiEncode};
 use ethers_providers::{Http, Provider, Middleware};
 use revm::{
     db::{CacheDB, EmptyDB, EthersDB},
-    inspectors::{NoOpInspector},
+    inspectors::{NoOpInspector, TracerEip3155},
     primitives::{ExecutionResult, Output, TransactTo, B160, U256 as rU256, B256, TxEnv},
     Database, EVM,
 };
@@ -14,7 +16,9 @@ use tokio;
 
 mod type_conversions;
 
+
 use crate::type_conversions::{ToEthers, ToReth};
+
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -24,7 +28,6 @@ async fn main() -> Result<()> {
     )?;
     
     let client = Arc::new(client);
-
 
     let mut number = 18044086;
 
@@ -47,7 +50,7 @@ async fn main() -> Result<()> {
             }
 
             // println!("Tx: {:#?}", txn);
-            let inspector = NoOpInspector();
+            let inspector = TracerEip3155::new(Box::new(stdout()), true, true);
             // let hexdata = 
             /*
             
@@ -72,8 +75,17 @@ async fn main() -> Result<()> {
             evm.env.tx.value = tx.value.into();
             // evm.env.tx.data = tx.input.clone();
 
-            let yeild = evm.inspect(inspector).unwrap();
-            println!("Yeild: {:#?}", yeild);
+            let yeild = evm.inspect(inspector);
+            // check yeild for type
+            match yeild {
+                std::result::Result::Ok(yeild) => {
+                    println!("Yeild: {:#?}", yeild);
+                }
+                Err(e) => {
+                    println!("Error: {:#?}", e);
+                }
+            }
+            // println!("Yeild: {:#?}", yeild);
             println!("txnhash: {:#?}", txn);
         });
     }

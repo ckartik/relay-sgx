@@ -3007,6 +3007,8 @@ dependencies = [
  "futures",
  "revm-interpreter",
  "revm-precompile",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
@@ -3019,6 +3021,7 @@ dependencies = [
  "derive_more",
  "enumn",
  "revm-primitives",
+ "serde",
  "sha3",
 ]
 
@@ -3443,6 +3446,7 @@ version = "1.0.105"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "693151e1ac27563d6dbcec9dee9fbd5da8539b20fa14ad3752b2e6d363ace360"
 dependencies = [
+ "indexmap 2.0.0",
  "itoa",
  "ryu",
  "serde",
