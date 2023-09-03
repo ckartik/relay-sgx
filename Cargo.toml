@@ -16,4 +16,4 @@ hex = "0.4.3"
 revm = { version = "3.3.0", features = ["ethersdb", "std", "serde"] }
 tokio = {"version"= "1.32.0", features=["full"] }
 reth-primitives = { version = "0.1.0-alpha.8", git = "https://github.com/paradigmxyz/reth", package = "reth-primitives" }
-
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }

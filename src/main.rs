@@ -15,7 +15,7 @@ use std::{str::FromStr, sync::Arc};
 use tokio;
 
 mod type_conversions;
-
+mod utils;
 
 use crate::type_conversions::{ToEthers, ToReth};
 
